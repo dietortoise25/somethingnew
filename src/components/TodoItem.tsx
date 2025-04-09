@@ -1,6 +1,22 @@
+import { useState } from "react";
 import { Todo } from "../type/todo";
-type TodoItemProps = { todo: Todo, toggleTodo: (id: string) => void, deleteTodo: (id: string) => void };
-function TodoItem({ todo, toggleTodo, deleteTodo }: TodoItemProps) {
+
+type TodoItemProps = {
+    todo: Todo, toggleTodo: (id: string) => void,
+    deleteTodo: (id: string) => void,
+    updateTodo: (id: string, text: string) => void
+};
+
+function TodoItem({ todo, toggleTodo, deleteTodo, updateTodo }: TodoItemProps) {
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [inputValue, setInputValue] = useState<string>(todo.text);
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        updateTodo(todo.id, inputValue);
+        setIsEditing(false);
+    }
+
     return (<li className="list-row flex justify-between">
         <div className="flex items-center gap-5">
             <input type="checkbox" className="checkbox"
@@ -9,10 +25,19 @@ function TodoItem({ todo, toggleTodo, deleteTodo }: TodoItemProps) {
                     toggleTodo.bind(null, todo.id)
                 }
             />
-            <div>{todo.text}</div>
+            {!isEditing && <div>{todo.text}</div>}
+            {isEditing &&
+                <form className="flex" onSubmit={handleSubmit}>
+                    <input type="text" className="input input-bordered w-full" value={inputValue} onChange={e => setInputValue(e.target.value)} />
+                    <button type="submit" className="btn btn-square btn-ghost" >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                    </button>
+                </form>}
         </div>
         <div>
-            <button className="btn btn-square btn-ghost">
+            <button className="btn btn-square btn-ghost" onClick={() => setIsEditing(true)}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
                 </svg>

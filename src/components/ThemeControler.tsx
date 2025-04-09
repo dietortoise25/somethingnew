@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 function ThemeControler() {
     // 修复 useState 初始化，添加类型断言和默认值
-    const [currentTheme,setCurrentTheme] = useState("light");
+    const [currentTheme, setCurrentTheme] = useState("light");
     const toggleTheme = () => {
         if (currentTheme === "dark") {
             setCurrentTheme("light");
@@ -13,14 +13,14 @@ function ThemeControler() {
         }
     }
     useEffect(() => {
-        
-    })
+        setCurrentTheme("dark");
+    }, [])
 
     return <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
-        <input type="checkbox" className="theme-controller" value="synthwave" 
-        checked={currentTheme === "dark"}
-        onChange={() => toggleTheme()} 
+        <input type="checkbox" className="theme-controller" value="synthwave"
+            checked={currentTheme === "dark"}
+            onChange={() => toggleTheme()}
         />
 
         {/* sun icon */}
