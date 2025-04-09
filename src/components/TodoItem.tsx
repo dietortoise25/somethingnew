@@ -13,6 +13,9 @@ function TodoItem({ todo, toggleTodo, deleteTodo, updateTodo }: TodoItemProps) {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (inputValue.trim() === "") {
+            return;
+        }
         updateTodo(todo.id, inputValue);
         setIsEditing(false);
     }
