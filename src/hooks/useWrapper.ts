@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Todo } from "../type/todo";
 
 export default function useWrapper() {
@@ -27,5 +27,22 @@ export default function useWrapper() {
     localStorage.setItem("savedTodos", JSON.stringify(todos));
   }, [todos]);
 
-  return { todos, addTodo, toggleTodo, deleteTodo, updateTodo };
+  const [activeTab, setActiveTab] = useState<number>(0);
+
+  const filteredTodos = useMemo(() => {
+    if (activeTab === 0) return todos;
+    return activeTab === 1
+      ? todos.filter((todo) => todo.completed)
+      : todos.filter((todo) => !todo.completed);
+  }, [todos, activeTab]);
+
+  return {
+    activeTab,
+    filteredTodos,
+    addTodo,
+    toggleTodo,
+    deleteTodo,
+    updateTodo,
+    setActiveTab,
+  };
 }
